@@ -21,9 +21,7 @@
 </template>
 
 <script>
-export default {
-  middleware: 'log',
-}
+export default {}
 </script>
 
 <style>
