@@ -7,7 +7,7 @@
     </div>
     <div class="content">
       <div class="links">
-        // TODO: handle No Data Fetched
+        <!-- TODO: handle No Data Fetched -->
         <dolarChart
           :chart-data="dayRates || []"
           label="Dolar Prices"
