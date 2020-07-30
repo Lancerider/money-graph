@@ -17,4 +17,7 @@ $ npm run start
 $ npm run generate
 ```
 
+## See current DEMO
+You could see this projects last deploy in this [heroku app](https://metricks.herokuapp.com/).
+
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
