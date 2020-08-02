@@ -55,7 +55,7 @@ export default {
   },
   computed: {
     dailyRatesProcessed() {
-      return this.$store.getters.getSortedDailyRates
+      return this.$store.getters.getDailyRatesFluctuation
     },
   },
 }

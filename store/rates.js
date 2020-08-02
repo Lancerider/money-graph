@@ -1,4 +1,7 @@
-import { sortRatesByDate } from '@/utils/ratesUtils.js'
+import {
+  sortRatesByDate,
+  calculateDailyFluctuation,
+} from '@/utils/ratesUtils.js'
 
 export const namespaced = false
 export const state = () => ({
@@ -28,12 +31,23 @@ export const getters = {
   getSortedDailyRates: (state) => {
     const dailyRatesRaw = [...state.dailyRatesRaw]
     // eslint-disable-next-line no-console
+    console.log('getSortedDailyRates')
     const sortRates = sortRatesByDate(dailyRatesRaw, 'fecha', 'valor')
+
     return sortRates
   },
-  getDailyRatesVariations: (state) => {
+  getDailyRatesFluctuation: (state, getters) => {
     // eslint-disable-next-line no-console
-    console.log('getDailyRatesVariations')
-    return state.dailyRatesRaw
+    console.log('getDailyRatesFluctuation')
+    const dailyRates = getters.getSortedDailyRates
+    const fluctuationArray = calculateDailyFluctuation(
+      dailyRates,
+      'fecha',
+      'valor'
+    )
+    // eslint-disable-next-line no-console
+    console.log('Console log : fluctuationArray', fluctuationArray)
+
+    return fluctuationArray
   },
 }
