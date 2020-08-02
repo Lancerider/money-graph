@@ -1,16 +1,16 @@
 <template>
   <div class="container">
     <div class="ribbon top">
-      <a href="/">
+      <nuxt-link to="/" prefetch>
         Volver
-      </a>
+      </nuxt-link>
     </div>
     <div class="content">
       <div class="links">
         <!-- TODO: handle No Data Fetched -->
         <dolarChart
-          :chart-data="dayRates || []"
-          label="Dolar Prices"
+          :chart-data="dailyRatesProcessed"
+          label="Dolar Rates"
           :options="chartOptions"
         />
       </div>
@@ -20,43 +20,43 @@
 </template>
 
 <script>
-import dolarChart from '@/components/dolarChart'
+import dolarChart from '@/components/dolarChart.vue'
 
 export default {
   name: 'MainPage',
   components: {
     dolarChart,
   },
-  async asyncData({ $axios }) {
-    // TODO: handling get error
-    const data = await $axios.$get('https://mindicador.cl/api/dolar/2020')
-    const serie = data.serie.reverse()
-    const dolarVariationArray = serie.map((dayInfo, index) => {
-      if (index === 0) {
-        return 0
-      }
-      const dailyPriceVariation = dayInfo.valor - serie[index - 1].valor
+  async fetch({ store, $axios, env }) {
+    if (this.isDataFetched) return
 
-      return {
-        fecha: dayInfo.fecha,
-        valor: dailyPriceVariation,
+    try {
+      const getDolarSettings = {
+        url: `${env.exchangeApi_BaseUrl}/dolar/2020`,
+        valuesKey: env.exchangeApi_ValuesKey,
       }
-    })
-    // { fecha: '2020-07-30T04:00:00.000Z', valor: 759.18 },
-    // eslint-disable-next-line no-console
-    console.log('Console log : Data -> data', dolarVariationArray)
-    return { dayRates: dolarVariationArray }
+      await store.dispatch('GET_RATES', getDolarSettings)
+      this.isDataFetched = true
+    } catch (error) {
+      // TODO: connect Sentry
+      // eslint-disable-next-line no-console
+      console.error('nuxtServerInit -> error fetching dolar rates', error)
+      this.isDataFetched = false
+    }
   },
-  // created() {
-
-  // }
   data() {
     return {
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
       },
+      isDataFetched: false,
     }
+  },
+  computed: {
+    dailyRatesProcessed() {
+      return this.$store.getters.getSortedDailyRates
+    },
   },
 }
 </script>
