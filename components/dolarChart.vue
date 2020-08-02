@@ -1,5 +1,8 @@
 <script>
 import { Line } from 'vue-chartjs'
+import moment from 'moment'
+// eslint-disable-next-line no-console
+
 export default {
   extends: Line,
   props: {
@@ -17,10 +20,10 @@ export default {
     },
   },
   mounted() {
-    const dates = this.chartData.map((dayRate) => dayRate.fecha).reverse()
-    const dolarRates = this.chartData
-      .map((dolarRate) => dolarRate.valor)
-      .reverse()
+    const dates = this.chartData.map((dayRate) =>
+      moment(dayRate.fecha).format('DD-MM-YYYY')
+    )
+    const dolarRates = this.chartData.map((dolarRate) => dolarRate.valor)
 
     this.renderChart(
       {
