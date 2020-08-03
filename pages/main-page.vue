@@ -54,13 +54,13 @@ export default {
           valuesKey,
         }
 
-        const apiCall = store.dispatch('GET_RATES', getDolarSettings)
+        const apiCall = store.dispatch('fetchRates', getDolarSettings)
 
         apiAsyncCalls.push(apiCall)
       }
 
       await Promise.all(apiAsyncCalls)
-      store.dispatch('PROCESS_FETCHED_DATA')
+      store.dispatch('processFetchedData')
 
       this.isDataFetched = true
     } catch (error) {

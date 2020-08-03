@@ -8,6 +8,7 @@ import {
 } from '@/utils/ratesUtils.js'
 
 export const namespaced = false
+
 export const state = () => ({
   dailyRatesRaw: [],
   dailyRatesProcessed: [],
@@ -38,7 +39,7 @@ export const actions = {
     )
     commit('SET_START_DATA_DATE', startFetchDate)
   },
-  GET_RATES({ commit }, settings) {
+  fetchRates({ commit }, settings) {
     return new Promise((resolve, reject) => {
       const { url, valuesKey } = settings
 
@@ -48,7 +49,7 @@ export const actions = {
       })
     })
   },
-  PROCESS_FETCHED_DATA({ commit, state }) {
+  processFetchedData({ commit, state }) {
     const dailyRatesRaw = [...state.dailyRatesRaw]
     const { startDataDate, endDataDate } = state
     const formatedKeysData = formatRatesDataKeys(
@@ -63,6 +64,12 @@ export const actions = {
 }
 
 export const getters = {
+  getEndDataDate: (state) => {
+    return state.endDataDate
+  },
+  getStartDataDate: (state) => {
+    return state.startDataDate
+  },
   getRawDailyRates: (state) => {
     return state.dailyRatesRaw
   },
