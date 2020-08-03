@@ -8,9 +8,9 @@ export default {
    ** Nuxt target
    ** See https://nuxtjs.org/api/configuration-target
    */
-  target: 'static',
+  target: 'spa',
   router: {
-    base: '/money_graph',
+    base: '/money_graph/',
   },
   /*
    ** Headers of the page
