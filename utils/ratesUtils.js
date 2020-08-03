@@ -26,7 +26,7 @@ export const calculateDailyFluctuation = (
 
     return {
       date: dayInfo[datesKey],
-      value: dailyPriceDifference,
+      value: dailyPriceDifference.toFixed(2),
     }
   })
 
