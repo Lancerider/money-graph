@@ -40,11 +40,10 @@ export default {
     store.commit('RESET_RAW_DAILY_RATES')
 
     try {
-      // const startDate = moment().subtract(defaultRange, 'years')
       const totalApiCalls = defaultRange
       const apiAsyncCalls = []
 
-      // Make several calls to exchange API
+      // Make simultaneous calls to exchange API
       for (let i = 0; i <= totalApiCalls; i++) {
         const endDate = moment() // Now
         const year = endDate.subtract(i, 'years').format('YYYY')
@@ -60,6 +59,8 @@ export default {
       }
 
       await Promise.all(apiAsyncCalls)
+      store.dispatch('PROCESS_FETCHED_DATA')
+
       this.isDataFetched = true
     } catch (error) {
       // TODO: connect Sentry
@@ -81,7 +82,7 @@ export default {
   },
   mounted() {
     // eslint-disable-next-line no-console
-    console.log(this.$store.getters.getRawDailyRates)
+    console.log(this.$store.getters.getProcessedDailyRates)
   },
 }
 </script>

@@ -1,51 +1,51 @@
 /* eslint-disable no-console */
 import moment from 'moment'
 
-export const sortRatesByDate = (ratesArray, datesKey) => {
+export const sortRatesByDate = (ratesArray) => {
   const sortedArray = ratesArray.sort((a, b) => {
-    return moment(a[datesKey]).diff(b[datesKey])
+    return moment(a.date).diff(b.date)
   })
   return sortedArray
 }
 
-export const calculateDailyFluctuation = (
-  dailyRatesArray,
-  datesKey,
-  valuesKey
-) => {
+export const filterDates = (datesArray, startDate, endDate) => {
+  const filteredDates = datesArray.filter((dateData) => {
+    const date = moment(dateData.date, 'YYYY-MM-DD')
+    const isDateInRange =
+      date.isSameOrAfter(startDate) && date.isSameOrBefore(endDate)
+
+    return isDateInRange
+  })
+  return filteredDates
+}
+
+export const formatRatesDataKeys = (ratesArray, datesKey, valuesKey) => {
+  const dataKeysFormatted = ratesArray.map((dateData) => {
+    return {
+      date: dateData[datesKey],
+      value: dateData[valuesKey],
+    }
+  })
+  return dataKeysFormatted
+}
+
+export const calculateDailyFluctuation = (dailyRatesArray) => {
   const dailyFluctuations = dailyRatesArray.map((dayInfo, index) => {
     if (index === 0) {
       return {
-        date: dayInfo[datesKey],
+        date: dayInfo.date,
         value: 0,
       }
     }
-    const thisDayValue = dayInfo[valuesKey]
-    const previousDayValue = dailyRatesArray[index - 1][valuesKey]
+    const thisDayValue = dayInfo.value
+    const previousDayValue = dailyRatesArray[index - 1].value
     const dailyPriceDifference = thisDayValue - previousDayValue
 
     return {
-      date: dayInfo[datesKey],
+      date: dayInfo.date,
       value: dailyPriceDifference.toFixed(2),
     }
   })
 
   return dailyFluctuations
 }
-// eslint-disable-next-line no-console
-// const serie = data.serie.reverse()
-// const dolarVariationArray = serie.map((dayInfo, index) => {
-// if (index === 0) {
-//   return 0
-// }
-// const dailyPriceVariation = dayInfo.valor - serie[index - 1].valor
-
-// return {
-//   fecha: dayInfo.fecha,
-//   valor: dailyPriceVariation,
-// }
-// })
-// { fecha: '2020-07-30T04:00:00.000Z', valor: 759.18 },
-// eslint-disable-next-line no-console
-// console.log('Console log : Data -> data', dolarVariationArray)
-// return { dayRates: dolarVariationArray }
