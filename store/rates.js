@@ -11,16 +11,23 @@ export const state = () => ({
 })
 
 export const mutations = {
-  SET_RAW_DAILY_Rates: (state, dailyPriceData) => {
-    state.dailyRatesRaw = dailyPriceData
+  RESET_RAW_DAILY_RATES: (state) => {
+    state.dailyRatesRaw = []
+  },
+  ADD_RAW_DAILY_RATES: (state, dailyPriceData) => {
+    state.dailyRatesRaw = [...state.dailyRatesRaw, ...dailyPriceData]
   },
 }
 
 export const actions = {
-  async GET_RATES({ commit }, settings) {
-    const { url, valuesKey } = settings
-    const dailyPriceData = await this.$axios.$get(url)
-    commit('SET_RAW_DAILY_Rates', dailyPriceData[valuesKey])
+  GET_RATES({ commit }, settings) {
+    return new Promise((resolve, reject) => {
+      const { url, valuesKey } = settings
+      this.$axios.$get(url).then((dailyPriceData) => {
+        commit('ADD_RAW_DAILY_RATES', dailyPriceData[valuesKey])
+        resolve(dailyPriceData)
+      })
+    })
   },
 }
 
@@ -46,7 +53,7 @@ export const getters = {
       'valor'
     )
     // eslint-disable-next-line no-console
-    console.log('Console log : fluctuationArray', fluctuationArray)
+    // console.log('Console log : fluctuationArray', fluctuationArray)
 
     return fluctuationArray
   },

@@ -68,5 +68,6 @@ export default {
     exchangeApi_BaseUrl:
       process.env.EXCHANGE_API_BASE_URL || 'https://mindicador.cl/api',
     exchangeApi_ValuesKey: process.env.EXCHANGE_API_VALUES_KEY || 'serie',
+    exchangeApi_DefaultRange: process.env.EXCHANGE_API_DEFAULT_RANGE || 2,
   },
 }

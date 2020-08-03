@@ -21,6 +21,7 @@
 
 <script>
 import dolarChart from '@/components/dolarChart.vue'
+import moment from 'moment'
 
 export default {
   name: 'MainPage',
@@ -30,12 +31,37 @@ export default {
   async fetch({ store, $axios, env }) {
     if (this.isDataFetched) return
 
+    const {
+      exchangeApi_DefaultRange: defaultRange,
+      exchangeApi_BaseUrl: baseUrl,
+      exchangeApi_ValuesKey: valuesKey,
+    } = env
+
+    store.commit('RESET_RAW_DAILY_RATES')
+
     try {
-      const getDolarSettings = {
-        url: `${env.exchangeApi_BaseUrl}/dolar/2020`,
-        valuesKey: env.exchangeApi_ValuesKey,
+      // const startDate = moment().subtract(defaultRange, 'years')
+      const totalApiCalls = defaultRange
+
+      // eslint-disable-next-line no-console
+      console.log('Console log : fetch -> totalApiCalls', totalApiCalls)
+      const apiAsyncCalls = []
+
+      // Make several call to exchange API
+      for (let i = 0; i <= totalApiCalls; i++) {
+        const endDate = moment() // Now
+        const year = endDate.subtract(i, 'years').format('YYYY')
+        const getDolarSettings = {
+          url: `${baseUrl}/dolar/${year}`,
+          valuesKey,
+        }
+        const apiCall = store.dispatch('GET_RATES', getDolarSettings)
+
+        // eslint-disable-next-line no-console
+        console.log('Console log : fetch -> getDolarSettings', getDolarSettings)
+        apiAsyncCalls.push(apiCall)
       }
-      await store.dispatch('GET_RATES', getDolarSettings)
+      await Promise.all(apiAsyncCalls)
       this.isDataFetched = true
     } catch (error) {
       // TODO: connect Sentry
@@ -57,6 +83,10 @@ export default {
     dailyRatesProcessed() {
       return this.$store.getters.getDailyRatesFluctuation
     },
+  },
+  mounted() {
+    // eslint-disable-next-line no-console
+    console.log(this.$store.getters.getRawDailyRates)
   },
 }
 </script>

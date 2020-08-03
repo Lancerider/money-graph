@@ -15,7 +15,10 @@ export const calculateDailyFluctuation = (
 ) => {
   const dailyFluctuations = dailyRatesArray.map((dayInfo, index) => {
     if (index === 0) {
-      return 0
+      return {
+        date: dayInfo[datesKey],
+        value: 0,
+      }
     }
     const thisDayValue = dayInfo[valuesKey]
     const previousDayValue = dailyRatesArray[index - 1][valuesKey]
