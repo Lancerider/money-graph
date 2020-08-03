@@ -26,9 +26,20 @@ $ npm run dev # To initialize the local server
 
 You can verify that the application server is running by navigating to the default address
 ```sh
-localhost:8080
+localhost:3000
 # OR
-127.0.0.1:8080
+127.0.0.1:3000
+```
+
+## Tests
+You can run jest tests
+```sh
+npm run test
+```
+
+You can run jest tests with Coverage Analisys
+```sh
+npm run test:coverage
 ```
 
 ## Build Setup
@@ -43,6 +54,6 @@ $ npm run generate
 ```
 
 ## See current DEMO
-You could find a live demo of this project current development stage in this [heroku app](https://metricks.herokuapp.com/) or [gitlab](https://metricks.herokuapp.com/).
+You could find a live demo of this project current development stage in this [heroku app](https://metricks.herokuapp.com/).
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
