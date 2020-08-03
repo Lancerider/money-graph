@@ -3,6 +3,9 @@
     <div class="ribbon"></div>
     <div class="content">
       <div class="links">
+        <!-- TODO: Set Vue i18n -->
+        <!-- TODO: Make login -->
+        <!-- TODO: Scss Structure -->
         <h1 class="title">
           metriks
         </h1>

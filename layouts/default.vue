@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- TODO: Make Home and Main layouts -->
     <Nuxt keep-alive />
   </div>
 </template>
