@@ -10,7 +10,7 @@ export default {
    */
   target: 'spa',
   router: {
-    base: '/money_graph/',
+    base: '/money-graph/',
   },
   /*
    ** Headers of the page
