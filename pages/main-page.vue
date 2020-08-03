@@ -6,14 +6,13 @@
       </nuxt-link>
     </div>
     <div class="content">
-      <div class="links">
-        <!-- TODO: handle No Data Fetched -->
-        <dolarChart
-          :chart-data="dailyRatesProcessed"
-          label="Dolar Rates"
-          :options="chartOptions"
-        />
-      </div>
+      <div class="links"></div>
+      <!-- TODO: handle No Data Fetched -->
+      <dolarChart
+        :chart-data="dailyRatesProcessed"
+        label="Variación del Dolar"
+        :options="chartOptions"
+      />
     </div>
     <div class="ribbon"></div>
   </div>
@@ -42,25 +41,23 @@ export default {
     try {
       // const startDate = moment().subtract(defaultRange, 'years')
       const totalApiCalls = defaultRange
-
-      // eslint-disable-next-line no-console
-      console.log('Console log : fetch -> totalApiCalls', totalApiCalls)
       const apiAsyncCalls = []
 
-      // Make several call to exchange API
+      // Make several calls to exchange API
       for (let i = 0; i <= totalApiCalls; i++) {
         const endDate = moment() // Now
         const year = endDate.subtract(i, 'years').format('YYYY')
+
         const getDolarSettings = {
           url: `${baseUrl}/dolar/${year}`,
           valuesKey,
         }
+
         const apiCall = store.dispatch('GET_RATES', getDolarSettings)
 
-        // eslint-disable-next-line no-console
-        console.log('Console log : fetch -> getDolarSettings', getDolarSettings)
         apiAsyncCalls.push(apiCall)
       }
+
       await Promise.all(apiAsyncCalls)
       this.isDataFetched = true
     } catch (error) {
@@ -75,6 +72,41 @@ export default {
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
+        // tooltips: {
+        //   callbacks: {
+        //     label(tooltipItem, data) {
+        //       return `${tooltipItem.yLabel} CLP`
+        //     },
+        //   },
+        // },
+        scales: {
+          xAxes: [
+            {
+              ticks: {
+                autoSkip: true,
+                maxTicksLimit: 12.1,
+                labelString: 'Fechas',
+                maxRotation: 0,
+                minRotation: 0,
+                callback: (value, index, values) => {
+                  return moment(value, 'DD-MM-YYYY').format('MMM YYYY')
+                },
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Tiempo [dia]',
+              },
+            },
+          ],
+          yAxes: [
+            {
+              scaleLabel: {
+                display: true,
+                labelString: 'Diferencia [CLP]',
+              },
+            },
+          ],
+        },
       },
       isDataFetched: false,
     }
@@ -138,5 +170,12 @@ export default {
 
 .links {
   padding-top: 15px;
+}
+
+.content {
+  padding: 20px 40px;
+  canvas {
+    height: 600px;
+  }
 }
 </style>

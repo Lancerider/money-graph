@@ -32,6 +32,10 @@ export default {
           {
             label: this.label,
             data: dolarRates,
+            borderColor: 'black',
+            backgroundColor: '#ff8a32aa',
+            borderWidth: '1',
+            pointRadius: '0',
           },
         ],
       },
