@@ -1,22 +1,85 @@
 <template>
   <div class="container">
     <div class="ribbon top">
-      <a href="/">
+      <nuxt-link to="/" prefetch>
         Volver
-      </a>
+      </nuxt-link>
     </div>
     <div class="content">
-      <div class="links">
-        Gráfica
-      </div>
+      <div class="links"></div>
+      <!-- TODO: handle No Data Fetched -->
+      <dolarChart
+        :chart-data="dailyRatesProcessed"
+        label="Variación del Dolar"
+        :options="chartOptions"
+      />
     </div>
     <div class="ribbon"></div>
   </div>
 </template>
 
 <script>
+import dolarChart from '@/components/dolarChart.vue'
+import { chartOptions } from '@/utils/chartOptions.js'
+import moment from 'moment'
+
 export default {
-  middleware: 'log',
+  name: 'MainPage',
+  components: {
+    dolarChart,
+  },
+  async fetch({ store, $axios, env }) {
+    if (this.isDataFetched) return
+
+    const {
+      exchangeApi_DefaultRange: defaultRange,
+      exchangeApi_BaseUrl: baseUrl,
+      exchangeApi_ValuesKey: valuesKey,
+    } = env
+
+    store.commit('RESET_RAW_DAILY_RATES')
+
+    try {
+      const totalApiCalls = defaultRange
+      const apiAsyncCalls = []
+
+      // Make simultaneous calls to exchange API
+      for (let i = 0; i <= totalApiCalls; i++) {
+        const endDate = moment() // Now
+        const year = endDate.subtract(i, 'years').format('YYYY')
+
+        const getDolarSettings = {
+          url: `${baseUrl}/dolar/${year}`,
+          valuesKey,
+        }
+
+        const apiCall = store.dispatch('GET_RATES', getDolarSettings)
+
+        apiAsyncCalls.push(apiCall)
+      }
+
+      await Promise.all(apiAsyncCalls)
+      store.dispatch('PROCESS_FETCHED_DATA')
+
+      this.isDataFetched = true
+    } catch (error) {
+      // TODO: connect Sentry
+      // eslint-disable-next-line no-console
+      console.error('nuxtServerInit -> error fetching dolar rates', error)
+      this.isDataFetched = false
+    }
+  },
+  data() {
+    return {
+      chartOptions,
+      isDataFetched: false,
+    }
+  },
+  computed: {
+    dailyRatesProcessed() {
+      return this.$store.getters.getDailyRatesFluctuation
+    },
+  },
 }
 </script>
 
@@ -67,5 +130,12 @@ export default {
 
 .links {
   padding-top: 15px;
+}
+
+.content {
+  padding: 20px 40px;
+  canvas {
+    height: 600px;
+  }
 }
 </style>

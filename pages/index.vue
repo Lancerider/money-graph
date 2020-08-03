@@ -6,14 +6,9 @@
         <h1 class="title">
           metriks
         </h1>
-        <a
-          href="./main-page/"
-          target="_self"
-          rel="noopener noreferrer"
-          class="button--orange"
-        >
+        <nuxt-link to="./main-page/" class="button--orange" prefetch>
           Ver Gráfica
-        </a>
+        </nuxt-link>
       </div>
     </div>
     <div class="ribbon"></div>
@@ -24,7 +19,7 @@
 export default {}
 </script>
 
-<style>
+<style scoped>
 .container {
   margin: 0 auto;
   min-height: 100vh;
