@@ -1,7 +1,6 @@
 <script>
 import { Line } from 'vue-chartjs'
 import moment from 'moment'
-// eslint-disable-next-line no-console
 
 export default {
   extends: Line,

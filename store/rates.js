@@ -50,8 +50,6 @@ export const actions = {
   },
   PROCESS_FETCHED_DATA({ commit, state }) {
     const dailyRatesRaw = [...state.dailyRatesRaw]
-    // eslint-disable-next-line no-console
-    console.log('PROCESS_FETCHED_DATA')
     const { startDataDate, endDataDate } = state
     const formatedKeysData = formatRatesDataKeys(
       dailyRatesRaw,
@@ -69,17 +67,11 @@ export const getters = {
     return state.dailyRatesRaw
   },
   getProcessedDailyRates: (state) => {
-    // eslint-disable-next-line no-console
-    console.log('getProcessedDailyRates')
     const sortRates = state.dailyRatesProcessed
     return sortRates
   },
   getDailyRatesFluctuation: (state, getters) => {
-    // eslint-disable-next-line no-console
-    console.log('getDailyRatesFluctuation', getters.getProcessedDailyRates)
     const dailyRates = getters.getProcessedDailyRates
-    // eslint-disable-next-line no-console
-    console.log('Console log : dailyRates', dailyRates)
     const fluctuationArray = calculateDailyFluctuation(dailyRates)
 
     return fluctuationArray

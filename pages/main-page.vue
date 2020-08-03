@@ -80,10 +80,6 @@ export default {
       return this.$store.getters.getDailyRatesFluctuation
     },
   },
-  mounted() {
-    // eslint-disable-next-line no-console
-    console.log(this.$store.getters.getProcessedDailyRates)
-  },
 }
 </script>
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import moment from 'moment'
 
 export const sortRatesByDate = (ratesArray) => {
@@ -16,6 +15,7 @@ export const filterDates = (datesArray, startDate, endDate) => {
 
     return isDateInRange
   })
+
   return filteredDates
 }
 
@@ -26,6 +26,7 @@ export const formatRatesDataKeys = (ratesArray, datesKey, valuesKey) => {
       value: dateData[valuesKey],
     }
   })
+
   return dataKeysFormatted
 }
 
